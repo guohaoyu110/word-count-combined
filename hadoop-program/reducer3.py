@@ -1,0 +1,49 @@
+#!/usr/bin/python
+"""A more advanced Reducer, using Python iterators and generators."""
+
+from itertools import groupby
+from operator import itemgetter
+import sys
+
+def read_mapper_output(file, separator='\t'):
+    for line in file:
+        yield line.rstrip().split(separator, 1)
+
+def get_keys(d, value):
+    return [k for k,v in d.items() if v == value]
+
+def main(separator='\t'):
+    # input comes from STDIN (standard input)
+    charcnt = {}
+    data = read_mapper_output(sys.stdin, separator=separator)
+    # groupby groups multiple word-count pairs by word,
+    # and creates an iterator that returns consecutive keys and their group:
+    #   current_word - string containing a word (the key)
+    #   group - iterator yielding all ["&lt;current_word&gt;", "&lt;count&gt;"] items
+    # max = 0
+    # min = 1000000000
+    for current_char, group in groupby(data, itemgetter(0)):
+        try:
+            total_count = sum(int(count) for current_char, count in group)
+            charcnt[current_char] = total_count
+            # print "%s%s%d" % (current_word, separator, total_count)
+            # if total_count > max:
+            #     max = total_count
+            #     current = current_word
+            # if total_count < min:
+            #     min = total_count
+            #     current1 = current_word
+        except ValueError:
+            # count was not a number, so silently discard this item
+            pass
+    for char, cnt in charcnt.items():
+        print "%s%s%d" %(char, separator, cnt)
+    value1 = max(charcnt.values())
+    value2 = min(charcnt.values())
+    print "ascii characters with max freq = %d is %s " %(value1, get_keys(charcnt,value1))
+    print "ascii characters with min freq = %d is %s " %(value2, get_keys(charcnt,value2))
+
+    # print "word with max freq = %d is %s" % (max, current)
+    # print "word with min freq = %d is %s" % (min, current1)
+if __name__ == "__main__":
+    main()
