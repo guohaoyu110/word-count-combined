@@ -284,19 +284,24 @@ You can explore more programs under "hadoop jar /usr/local/hadoop/share/hadoop/m
 
 ð If you get error while clicking some text under page, replace the private ip in http link with corresponding instance public ip .
 
+
 Debugging Tips:
 
+```
 use command "jps " to view java running processes on each instances.
 
 "netstat -a -p | grep -i port" and then "kill pid". For releasing the port. (To troubleshoot port error obtained from logs inside for hdfs and yarn daemons)
 
 hadoop job -kill <job_id> --> to kill job (from namenode)
+```
 
 Now we will be discussing a technique in which you can use python to write your map and reduce functions. (normally in hadoop it's in java as you have seen in above examples). We will be using streaming api support of Hadoop to achieve this. (even c/c++ program can also be done in this way)
 
 Install python on all datanodes and namenode.
 
-- sudo apt-get install python
+```
+sudo apt-get install python
+```
 
 Here we will be implementing a word count map-reduce program. It reads text files and counts how often words occur. The input is text files and the output is text files, each line of which contains a word and the count of how often it occurred, separated by a tab.
 
@@ -358,13 +363,13 @@ count = int(count)
 
 except ValueError:
 
-- count was not a number, so silently
-- ignore/discard this line
+# count was not a number, so silently
+# ignore/discard this line
 
 continue
 
-- this IF-switch only works because Hadoop sorts map output
-- by key (here: word) before it is passed to the reducer if current_word == word:
+# this IF-switch only works because Hadoop sorts map output
+# by key (here: word) before it is passed to the reducer if current_word == word:
 
 current_count += count
 
@@ -372,13 +377,13 @@ else:
 
 if current_word:
 
-- write result to STDOUT
+# write result to STDOUT
 
 print '%s\t%s' % (current_word, current_count) current_count = count
 
 current_word = word
 
-- do not forget to output the last word if needed! if current_word == word:
+# do not forget to output the last word if needed! if current_word == word:
 
 print '%s\t%s' % (current_word, current_count)
 ```
@@ -413,11 +418,11 @@ Now download 3 input text file for passing input to map reduce job. First create
 Execute below command to copy from local file system to hadoop filesystem.
 
 ```
-- hdfs dfs -copyFromLocal ~/test_txt /user/ubuntu/gutenberg
+hdfs dfs -copyFromLocal ~/test_txt /user/ubuntu/gutenberg
 
-For Viewing files under hdfs execute:
+# For Viewing files under hdfs execute:
 
-- hdfs dfs -ls /user/ubuntu
+hdfs dfs -ls /user/ubuntu
 ```
 
 ![](img/lab8-f20.021.png)
@@ -481,7 +486,7 @@ for words in data:
 
 
 
-- tab-delimited; the trivial word count is 1
+# tab-delimited; the trivial word count is 1
 
 for word in words:
 
@@ -509,14 +514,14 @@ yield line.rstrip().split(separator, 1)
 
 def main(separator='\t'):
 
-- input comes from STDIN (standard input)
+# input comes from STDIN (standard input)
 
 data = read_mapper_output(sys.stdin, separator=separator)
 
-- groupby groups multiple word-count pairs by word,
-- and creates an iterator that returns consecutive keys and their group:
-- current_word # string containing a word (the key)
-- group - iterator yielding all ["&lt;current_word&gt;", "&lt;count&gt;"] items for current_word, group in groupby(data, itemgetter(0)):
+# groupby groups multiple word-count pairs by word,
+# and creates an iterator that returns consecutive keys and their group:
+# current_word # string containing a word (the key)
+# group - iterator yielding all ["&lt;current_word&gt;", "&lt;count&gt;"] items for current_word, group in groupby(data, itemgetter(0)):
 
 try:
 
@@ -526,7 +531,7 @@ print "%s%s%d" % (current_word, separator, total_count)
 
 except ValueError:
 
-- count was not a number, so silently discard this item
+# count was not a number, so silently discard this item
 
 pass
 
@@ -537,7 +542,7 @@ main()
 
 Now download input dataset from:
 
-- wget http://www.i3s.unice.fr/~jplozi/hadooplab_lsds_2015/datasets/gutenber g-1G.txt.gz
+- wget http://www.i3s.unice.fr/~jplozi/hadooplab_lsds_2015/datasets/gutenberg-1G.txt.gz
 - gunzip gutenberg-1G.txt.gz
 
 Then copy this file to hadoop hdfs by executing:
@@ -547,9 +552,7 @@ Then copy this file to hadoop hdfs by executing:
 ===> 1. Then run map-reduce job with your modified code with this input dataset by executing: (I will be using this input dataset for grading purpose with your python changes present on map and reduce functions and it should use iterators and generators)( your new .py files should be uploaded along with report or video submission))
 
 ```
-- hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-
-
-streaming-2.10.1.jar -file /home/ubuntu/mapper.py -mapper
+- hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.10.1.jar -file /home/ubuntu/mapper.py -mapper
 
 /home/ubuntu/mapper.py -file /home/ubuntu/reducer.py -reducer
 
