@@ -7,7 +7,7 @@ For this lab we would be creating 1 namenode and 3 datanode (so 4 instances in t
 * https://en.wikipedia.org/wiki/MapReduce 
 * https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html 
 * https://hadoop.apache.org/docs/r2.10.1/hadoop-yarn/hadoop-yarn-site/YARN.html 
-* https://hadoop.apache.org/docs/r2.10.1/hadoop-mapreduce-client/hadoop-mapreduce-client- core/MapReduceTutorial.html
+* https://hadoop.apache.org/docs/r2.10.1/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html
 
 Select **Ubuntu Server 16.04 LTS (HVM)** image on x86 and configure the instance with only one interface it being elastic ip interface. Instance type should be of t2.medium or any instance with two vcpus and at least 4 GB of ram and 12 GB of hard drive space (you may try out this in student account to reduce cost). In your selected VPC you have to enable **DNS Hostname** from the VPC tab. For the only subnet attached to the VPC you have to enable **“auto-assign ipv4”** under “Modify auto assign public ipv4 address”. Moreover, you have to “auto assign public ip” set to **“use subnet setting (enable) **. Assign network interface IP statically from within the AWS. These options would automatically assign you a public ip since we have only one network interface per instance. (elastic ip not required)
 
@@ -26,11 +26,11 @@ Ensure that all the instances you have created uses same private key for ssh. We
 After logging in, execute below commands on all of the instances:
 
 ```
-- sudo cp /etc/ssh/ssh\_host\_rsa\_key ~/.ssh/id\_rsa
-- sudo cp /etc/ssh/ssh\_host\_rsa\_key.pub ~/.ssh/id\_rsa.pub (change to ubuntu@ in last )
-- sudo cat~/.ssh/id\_rsa.pub >> ~/.ssh/authorized\_keys (change to ubuntu@ in last)
-- sudo chmod 777 ~/.ssh/id\_rsa
-- sudo chmod 777 ~/.ssh/id\_rsa.pub
+- sudo cp /etc/ssh/ssh_host_rsa_key ~/.ssh/id_rsa
+- sudo cp /etc/ssh/ssh_host_rsa_key.pub ~/.ssh/id_rsa.pub (change to ubuntu@ in last )
+- sudo cat~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys (change to ubuntu@ in last)
+- sudo chmod 777 ~/.ssh/id_rsa
+- sudo chmod 777 ~/.ssh/id_rsa.pub
 ```
 
 ![](img/lab8-f20.005.png)
@@ -60,9 +60,9 @@ Now download hadoop by executing:
 Edit ~/.profile file with below contents added as shown in figure:
 
 ```
-- export JAVA\_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
-- export HADOOP\_HOME=/usr/local/hadoop 
-- PATH="$HOME/bin:$HOME/.local/bin:$JAVA\_HOME/bin:$HADOOP\_HOME/bin:$PATH"
+- export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+- export HADOOP_HOME=/usr/local/hadoop 
+- PATH="$HOME/bin:$HOME/.local/bin:$JAVA_HOME/bin:$HADOOP_HOME/bin:$PATH"
 ```
 
 ![](img/lab8-f20.007.png)
@@ -77,7 +77,7 @@ Edit following files under “/usr/local/hadoop/etc/hadoop/” for all the insta
 
 ### 1. hadoop-env.sh
 
-replace "export JAVA\_HOME=" with "export JAVA\_HOME=/usr/lib/jvm/java-1.8.0-openjdk- amd64"
+replace "export JAVA_HOME=" with "export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk- amd64"
 
 ![](img/lab8-f20.008.png)
 
@@ -92,7 +92,7 @@ Edit it with the below content ( remove: <configuration> </configuration> and up
 
 <name>fs.default.name</name>
 
-<value>hdfs://<namenode\_private\_IP> :9000</value>
+<value>hdfs://<namenode_private_IP> :9000</value>
 
 </property>
 
@@ -149,7 +149,7 @@ Edit with below content: ( remove: <configuration> </configuration> and update w
 First rename mapred-site.xml.template to mapred-site.xml.
 
 ```
-mv /usr/local/hadoop/etc/hadoop/mapred-site.xml.template /usr/local/hadoop/etc/hadoop/mapred- site.xml
+mv /usr/local/hadoop/etc/hadoop/mapred-site.xml.template /usr/local/hadoop/etc/hadoop/mapred-site.xml
 ```
 
 Then put below contents in it.
@@ -176,7 +176,7 @@ Edit with below content: ( remove: <configuration> </configuration> and update w
 
 <property>
 
-<name>yarn.nodemanager.aux-services</name> <value>mapreduce\_shuffle</value>
+<name>yarn.nodemanager.aux-services</name> <value>mapreduce_shuffle</value>
 
 </property>
 
@@ -188,14 +188,14 @@ Edit with below content: ( remove: <configuration> </configuration> and update w
 
 <property>
 
-<name>yarn.resourcemanager.hostname</name> <value><namenode\_private\_IP> </value>
+<name>yarn.resourcemanager.hostname</name> <value><namenode_private_IP> </value>
 
 <description>The hostname of the Resource Manager.</description> </property>
 
 </configuration>
 ```
 
-Give namenode eth0 interface ip in <namenode\_private\_IP> for all of the instances (namenode + datanodes).
+Give namenode eth0 interface ip in <namenode_private_IP> for all of the instances (namenode + datanodes).
 
 Replicate the above configurations in **3 datanode** instances also.
 
@@ -258,7 +258,7 @@ This should show your namenode and 3 datanodes.
 
 Now from the namenode, execute below sample program:
 
-- hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop- mapreduce-examples-2.10.1.jar pi 10 1000
+- hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.10.1.jar pi 10 1000
 
 If above program ran successfully you should be seeing an output like below:
 
@@ -290,7 +290,7 @@ use command "jps " to view java running processes on each instances.
 
 "netstat -a -p | grep -i port" and then "kill pid". For releasing the port. (To troubleshoot port error obtained from logs inside for hdfs and yarn daemons)
 
-hadoop job -kill <job\_id> --> to kill job (from namenode)
+hadoop job -kill <job_id> --> to kill job (from namenode)
 
 Now we will be discussing a technique in which you can use python to write your map and reduce functions. (normally in hadoop it's in java as you have seen in above examples). We will be using streaming api support of Hadoop to achieve this. (even c/c++ program can also be done in this way)
 
@@ -403,8 +403,8 @@ It should produce output like below: (ie <text> <word count>) (this is manual wa
 Now download 3 input text file for passing input to map reduce job. First create a directory under home and cd to that and download the txt files using wget:
 
 ```
-- mkdir ~/test\_txt
-- cd ~/test\_text
+- mkdir ~/test_txt
+- cd ~/test_txt
 - wget http://www.gutenberg.org/files/5000/5000-8.tx
 - wget http://www.gutenberg.org/files/4300/4300-0.txt
 - wget http://www.gutenberg.org/cache/epub/20417/pg20417.txt
@@ -413,7 +413,7 @@ Now download 3 input text file for passing input to map reduce job. First create
 Execute below command to copy from local file system to hadoop filesystem.
 
 ```
-- hdfs dfs -copyFromLocal ~/test\_text /user/ubuntu/gutenberg
+- hdfs dfs -copyFromLocal ~/test_txt /user/ubuntu/gutenberg
 
 For Viewing files under hdfs execute:
 
@@ -424,9 +424,9 @@ For Viewing files under hdfs execute:
 
 This should show a gutenberg folder as show above. Same thing should be visible from web gui access also on port 50070.
 
-\4. Now start map-reduce job by:
+4. Now start map-reduce job by:
 
-- hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop- streaming-2.10.1.jar -file /home/ubuntu/mapper.py -mapper /home/ubuntu/mapper.py -file /home/ubuntu/reducer.py -reducer /home/ubuntu/reducer.py -input /user/ubuntu/gutenberg/\* -output /user/ubuntu/gutenberg-output
+- hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop- streaming-2.10.1.jar -file /home/ubuntu/mapper.py -mapper /home/ubuntu/mapper.py -file /home/ubuntu/reducer.py -reducer /home/ubuntu/reducer.py -input /user/ubuntu/gutenberg/* -output /user/ubuntu/gutenberg-output
 
 If everything was succesfull, you would be seeing a directory created at /user/ubuntu/gutenberg-output and contents visible under it.
 
@@ -537,7 +537,7 @@ main()
 
 Now download input dataset from:
 
-- wget http://www.i3s.unice.fr/~jplozi/ hadooplab\_lsds\_2015/datasets/gutenber g-1G.txt.gz
+- wget http://www.i3s.unice.fr/~jplozi/hadooplab_lsds_2015/datasets/gutenber g-1G.txt.gz
 - gunzip gutenberg-1G.txt.gz
 
 Then copy this file to hadoop hdfs by executing:
@@ -571,13 +571,13 @@ So, in total you have two programs to implement from scratch for hadoop and MPI.
 
 I will be relying on output of the above 1,2,3 program of map-reduce on Hadoop and MPI for grading purpose.
 
-REFERENCES:
+**REFERENCES:**
 
 * https://en.wikipedia.org/wiki/MapReduce 
 * https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html 
 * https://hadoop.apache.org/docs/r2.10.1/hadoop-yarn/hadoop-yarn-site/YARN.html 
 * https://hadoop.apache.org/docs/r2.10.1/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html
-* https://www.tutorialspoint.com/hadoop/hadoop\_mapreduce.htm https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-common/ClusterSetup.html 
+* https://www.tutorialspoint.com/hadoop/hadoop_mapreduce.htm https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-common/ClusterSetup.html 
 * https://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/ 
 * https://blog.gaelfoppolo.com/lets-try-hadoop-on-aws-13a23e641490 
 * https://developer.ibm.com/articles/l-pycon/
