@@ -35,7 +35,7 @@ After logging in, execute below commands on all of the instances:
 
 ![](img/lab8-f20.005.png)
 
-Ensure that in all remote hosts, the authorised\_key file is modified to include public key of the namenode (namenode -> where you will be running Hadoop commands) and it contains ubuntu@ for the host being added to it. My master node ip here was of 10.0.0.247. (these steps are same as the steps for establishing passwordless ssh connectivity as in previous labs).
+Ensure that in all remote hosts, the authorised_key file is modified to include public key of the namenode (namenode -> where you will be running Hadoop commands) and it contains ubuntu@ for the host being added to it. My master node ip here was of 10.0.0.247. (these steps are same as the steps for establishing passwordless ssh connectivity as in previous labs).
 
 ![](img/lab8-f20.006.png)
 
@@ -471,7 +471,7 @@ def main(separator='\t'):
 
 # input comes from STDIN (standard input)
 
-data = read\_input(sys.stdin)
+data = read_input(sys.stdin)
 
 for words in data:
 
