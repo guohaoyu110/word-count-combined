@@ -110,5 +110,5 @@ Sources
 
 * https://www.guru99.com/pyspark-tutorial.html 
 * https://courses.edx.org/courses/BerkeleyX/CS190.1x/1T2015/course/ 
-* https://archive.ics.uci.edu/ml/datasets/Smartphone- Based+Recognition+of+Human+Activities+and+Postural+Transitions 
+* https://archive.ics.uci.edu/ml/datasets/Smartphone-Based+Recognition+of+Human+Activities+and+Postural+Transitions 
 * https://spark.apache.org/docs/latest/rdd-programming-guide.html
