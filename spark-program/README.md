@@ -1,9 +1,6 @@
 Laboratory 9: Spark Programming
 
-
-
-
-Apache Spark is a powerful distributed computing framework for efficiently processing very large datasets. You will explore its libraries using the PySpark API in both a standalone and distributed environment. (start on this early as you have to run your program on Hadoop, MPI and spark with varying number of worker nodes)
+Apache Spark is a powerful distributed computing framework for efficiently processing very large datasets. You will explore its libraries using the PySpark API in both a standalone and distributed environment. (start on this early as you have to run your program on **Hadoop**, **MPI** and **spark** with varying number of worker nodes)
 
 ## **1. PySpark**
 
@@ -45,7 +42,7 @@ Run the following command to get the name of your container.
 ```
 docker ps
 ```
-![](lab9-f20.001.png)
+![](img/lab9-f20.001.png)
 
 In this case, my container’s name is “agitated\_mcclintock”. Use the Docker logs to get the link to access your Jupyter Notebook running PySpark by running the following command.
 
@@ -55,7 +52,7 @@ docker logs “name of container with no quotes”
 
 Copy the displayed link into your browser and create a new Python 3 notebook.
 
-![](lab9-f20.002.png)
+![](img/lab9-f20.002.png)
 
 Follow the tutorial linked below starting from section “Spark Context” to get familiar with the PySpark API. **The dataset that is used has been altered since the tutorial’s writing, changing several features and breaking certain functions. Additionally, there are several typos that you will need to fix.** When you’re finished, download your notebook and make sure to **TERMINATE** your instance to avoid additional costs. (You might want to google for how to use jupyter notebook instance and how to run the program step by step and re-execution)
 
@@ -100,7 +97,7 @@ Replicate functionally equivalent system as the codes you implemented using Hado
 
 Also ensure that you **don’t count space** as character for frequency count program and only take ascii characters **within ascii values of range [33 – 122]** and print it as character and not as integer.-> applicable for your previous Hadoop and MPI program also)
 
-![](lab9-f20.006.png)
+![](img/lab9-f20.006.png)
 
 Compare **Spark system against Hadoop and MPI** . Make **a diagram showing scalability performances for different number of nodes** . (so, you might want to try out with different number of worker nodes and execute your program on MPI, Hadoop and Spark on your created cluster and plot a graph by varying number of worker nodes). (**your program should be written in a generic way to work with varying number of worker nodes**). (you may try these out from student account)
 
