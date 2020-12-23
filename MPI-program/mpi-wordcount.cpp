@@ -18,19 +18,23 @@ struct pairs{
 
 
 char* readFile(FILE* file, size_t fileSize) {
-
-    long long readsize = min((size_t)buff_size, fileSize - lastPos);    
+    long long readsize = min((size_t)buff_size, fileSize - lastPos); 
+    std::cout << "readsize: " << readsize << std::endl;   
     if(0 >= readsize) {
         return NULL;
     }
 
     char* str = new char[readsize+1];
     long start = 0;
-    fseek(file, lastPos, SEEK_SET);
+    fseek(file, lastPos, SEEK_SET); // fseek 设置stream流的文件位置给定的偏移offset，参数offset意味着从给定的位置查找的字节数。
+    // stream -- 这是指向 FILE 对象的指针，该 FILE 对象标识了流。
+    // offset -- 这是相对 whence 的偏移量，以字节为单位。
+    // whence -- 这是表示开始添加偏移 offset 的位置。它一般指定为下列常量之一
     fread(str, 1, readsize, file);
 
     if(readsize > 50) {
         start = readsize - 50;
+        std::cout << "start: " << start << std::endl;
     }
 
     char* currptr = strchr(&str[start], ' '), *pre = NULL;
@@ -41,8 +45,7 @@ char* readFile(FILE* file, size_t fileSize) {
         return str;
     }
 
-    while (!(currptr == NULL))
-    {
+    while (!(currptr == NULL)){
         pre = currptr;
         currptr = strchr(currptr + 1, ' ');
     }
@@ -67,10 +70,10 @@ int main(int argc, char **argv) {
     double startTime = 0;
     int nTasks, rank;
     MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &nTasks);
-    MPI_Comm_rank( MPI_COMM_WORLD , &rank);
-    MPI_Type_extent(MPI_INT, &intex);
-    MPI_Type_extent(MPI_CHAR, &charex);
+    MPI_Comm_size(MPI_COMM_WORLD, &nTasks); //获取进程个数
+    MPI_Comm_rank( MPI_COMM_WORLD , &rank); // 获取当前进程编号，该值范围[0,p-1]
+    MPI_Type_extent(MPI_INT, &intex); // 连续数据类型
+    MPI_Type_extent(MPI_CHAR, &charex); 
     displacements[0] = (MPI_Aint)(0);
     displacements[1] = intex;
     MPI_Type_struct(2, blocks, displacements, types, &obj_type);
@@ -106,10 +109,10 @@ int main(int argc, char **argv) {
         printf("opened the file \n");
     }
 
-    //map for saving the String and frequency
+    //map for saving the String and frequency!
 
     double totalTime_noRead = 0, totalTime_NoDist = 0;
-    map<string, int> totalHashMap;
+    map<string, int> totalHashMap; // string for word string and int for frequency of the word
 
     while(true) {
         int status = 1;
@@ -123,6 +126,7 @@ int main(int argc, char **argv) {
         }
         nTotalLines = 0;
         MPI_Bcast(&status, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        // 一个序列号为root的进程将一条消息广播发送到组内的所有进程
         printf("status sent from 0 \n");
         if(status == 0) {
             break;
@@ -172,7 +176,8 @@ int main(int argc, char **argv) {
             free(StartId);
         } 
         else {
-            MPI_Status status;
+            MPI_Status status; // 消息状态，接受函数返回时，将在这个参数只是的变量中存放实际接受消息的状态消息
+            // 包括消息的源进程标识，消息标签，包含的数据签个数等
             MPI_Recv(&totalChars , 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status); // receive data to process
             if(totalChars > 0) {
                 buffer = new char[totalChars + 1];
